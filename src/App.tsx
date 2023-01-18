@@ -1,10 +1,10 @@
 import React from "react";
-import Task from "./components/molecules/Task/Task";
+import GroupTask from "./components/organisms/GroupTask/GroupTask";
 
 function App() {
   return (
     <>
-      <Task />
+      <GroupTask variant="warning" />
     </>
   );
 }

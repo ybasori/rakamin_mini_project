@@ -1,0 +1,55 @@
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px;
+
+  width: 326px;
+
+  border-radius: 4px;
+  gap: 8px;
+}
+.tasks-list {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+}
+.date {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 20px;
+
+  color: #404040;
+}
+.add-new {
+  display: flex;
+  gap: 6.67px;
+  cursor: pointer;
+}
+.text {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: #1d1f20;
+}
+.primary {
+  background: #f7feff;
+  border: 1px solid #01959f;
+}
+.warning {
+  background: #fffcf5;
+  border: 1px solid #feeabc;
+}
+.danger {
+  background: #fffafa;
+  border: 1px solid #f5b1b7;
+}
+.success {
+  background: #f8fbf9;
+  border: 1px solid #b8dbca;
+}
