@@ -5,7 +5,7 @@ import InputField from "../../atoms/InputField/InputField";
 import Button from "../../atoms/Button/Button";
 import TextField from "../../atoms/TextField/TextField";
 
-const CreateGroup: React.FC = () => {
+const CreateGroup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -14,7 +14,7 @@ const CreateGroup: React.FC = () => {
     <div className={styles["container"]}>
       <div className={styles["header"]}>
         <div className={styles["title"]}>Add New Group</div>
-        <div className={styles["close"]}>
+        <div className={styles["close"]} onClick={onClose}>
           <img src={close} loading="lazy" alt="" />
         </div>
       </div>
@@ -48,7 +48,7 @@ const CreateGroup: React.FC = () => {
       </div>
       <div className={styles["footer"]}>
         <div className={styles["action-button"]}>
-          <Button onClick={() => null}>Cancel</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button variant="primary" onClick={() => null}>
             Submit
           </Button>

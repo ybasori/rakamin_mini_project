@@ -9,8 +9,6 @@ const GroupList: React.FC = () => {
       <GroupTask variant="warning" />
       <GroupTask variant="danger" />
       <GroupTask variant="success" />
-      <GroupTask variant="success" />
-      <GroupTask variant="success" />
     </div>
   );
 };
