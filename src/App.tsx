@@ -1,12 +1,12 @@
 import React from "react";
 import Modal from "./components/atoms/Modal/Modal";
-import CreateGroup from "./components/molecules/CreateGroup/CreateGroup";
+import DeleteTask from "./components/molecules/DeleteTask/DeleteTask";
 
 function App() {
   return (
     <>
       <Modal onClose={() => null}>
-        <CreateGroup />
+        <DeleteTask />
       </Modal>
     </>
   );
