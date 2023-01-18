@@ -1,10 +1,10 @@
 import React from "react";
-import SettingButton from "./components/molecules/SettingButton/SettingButton";
+import Task from "./components/molecules/Task/Task";
 
 function App() {
   return (
     <>
-      <SettingButton />
+      <Task />
     </>
   );
 }
