@@ -1,10 +1,10 @@
 import React from "react";
-import GroupTask from "./components/organisms/GroupTask/GroupTask";
+import GroupList from "./components/organisms/GroupList/GroupList";
 
 function App() {
   return (
     <>
-      <GroupTask variant="warning" />
+      <GroupList />
     </>
   );
 }
