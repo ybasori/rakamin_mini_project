@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import InputField from "./components/atoms/InputField/InputField";
+import TextField from "./components/atoms/TextField/TextField";
 
 function App() {
   const [text, setText] = useState("");
   return (
-    <InputField
+    <TextField
       value={text}
       onChange={(e) => setText(e.currentTarget.value)}
       placeholder="input"
