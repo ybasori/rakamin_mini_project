@@ -1,8 +1,8 @@
 import React from "react";
-import Progress from "./components/atoms/Progress/Progress";
+import Label from "./components/atoms/Label/Label";
 
 function App() {
-  return <Progress number={90} />;
+  return <Label variant={"success"}>Group Task 1</Label>;
 }
 
 export default App;

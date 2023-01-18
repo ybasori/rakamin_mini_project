@@ -1,0 +1,34 @@
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 2px 8px;
+  width: fit-content;
+  border-radius: 4px;
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+}
+.primary {
+  border: 1px solid #4db5bc;
+  color: #01959f;
+  background: #f7feff;
+}
+.warning {
+  border: 1px solid #feeabc;
+  background: #fffcf5;
+  color: #fa9810;
+}
+.danger {
+  border: 1px solid #f5b1b7;
+  background: #fffafa;
+  color: #e11428;
+}
+.success {
+  border: 1px solid #b8dbca;
+  background: #f8fbf9;
+  color: #43936c;
+}
