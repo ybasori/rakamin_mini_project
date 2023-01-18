@@ -1,13 +1,10 @@
 import React from "react";
-import Modal from "./components/atoms/Modal/Modal";
-import DeleteTask from "./components/molecules/DeleteTask/DeleteTask";
+import SettingButton from "./components/molecules/SettingButton/SettingButton";
 
 function App() {
   return (
     <>
-      <Modal onClose={() => null}>
-        <DeleteTask />
-      </Modal>
+      <SettingButton />
     </>
   );
 }

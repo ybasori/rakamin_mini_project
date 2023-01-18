@@ -4,7 +4,10 @@ import close from "../../../assets/images/close.png";
 import InputField from "../../atoms/InputField/InputField";
 import Button from "../../atoms/Button/Button";
 
-const CreateTask: React.FC<{ edit?: boolean }> = ({ edit = false }) => {
+const CreateTask: React.FC<{ edit?: boolean; onClose: () => void }> = ({
+  edit = false,
+  onClose,
+}) => {
   const [form, setForm] = useState({
     name: "",
     progress: "",
@@ -15,7 +18,7 @@ const CreateTask: React.FC<{ edit?: boolean }> = ({ edit = false }) => {
         <div className={styles["title"]}>
           {edit ? "Edit Task" : "Create Task"}
         </div>
-        <div className={styles["close"]}>
+        <div className={styles["close"]} onClick={onClose}>
           <img src={close} loading="lazy" alt="" />
         </div>
       </div>
@@ -47,7 +50,7 @@ const CreateTask: React.FC<{ edit?: boolean }> = ({ edit = false }) => {
       </div>
       <div className={styles["footer"]}>
         <div className={styles["action-button"]}>
-          <Button onClick={() => null}>Cancel</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button variant="primary" onClick={() => null}>
             Save Task
           </Button>

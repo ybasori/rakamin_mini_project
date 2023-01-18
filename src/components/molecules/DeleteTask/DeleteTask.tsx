@@ -4,7 +4,7 @@ import close from "../../../assets/images/close.png";
 import Button from "../../atoms/Button/Button";
 import exclamation from "../../../assets/images/exclamation.png";
 
-const DeleteTask: React.FC = () => {
+const DeleteTask: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   return (
     <div className={styles["container"]}>
       <div className={styles["header"]}>
@@ -15,7 +15,7 @@ const DeleteTask: React.FC = () => {
           loading="lazy"
         />
         <div className={styles["title"]}>Delete Task</div>
-        <div className={styles["close"]}>
+        <div className={styles["close"]} onClick={onClose}>
           <img src={close} loading="lazy" alt="" />
         </div>
       </div>
@@ -26,7 +26,7 @@ const DeleteTask: React.FC = () => {
       </div>
       <div className={styles["footer"]}>
         <div className={styles["action-button"]}>
-          <Button onClick={() => null}>Cancel</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button variant="danger" onClick={() => null}>
             Delete
           </Button>
