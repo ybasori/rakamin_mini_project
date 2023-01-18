@@ -4,7 +4,7 @@ import close from "../../../assets/images/close.png";
 import InputField from "../../atoms/InputField/InputField";
 import Button from "../../atoms/Button/Button";
 
-const CreateTask: React.FC<{ edit?: boolean; onClose: () => void }> = ({
+const CreateEditTask: React.FC<{ edit?: boolean; onClose: () => void }> = ({
   edit = false,
   onClose,
 }) => {
@@ -60,4 +60,4 @@ const CreateTask: React.FC<{ edit?: boolean; onClose: () => void }> = ({
   );
 };
 
-export default CreateTask;
+export default CreateEditTask;
