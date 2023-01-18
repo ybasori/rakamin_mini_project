@@ -1,8 +1,8 @@
 import React from "react";
-import Label from "./components/atoms/Label/Label";
+import MenuDialog from "./components/atoms/MenuDialog/MenuDialog";
 
 function App() {
-  return <Label variant={"success"}>Group Task 1</Label>;
+  return <MenuDialog onClick={() => null} />;
 }
 
 export default App;
