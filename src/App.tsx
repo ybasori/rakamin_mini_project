@@ -1,12 +1,8 @@
 import React from "react";
-import GroupList from "./components/organisms/GroupList/GroupList";
+import ProductRoadmap from "./components/pages/ProductRoadmap/ProductRoadmap";
 
 function App() {
-  return (
-    <>
-      <GroupList />
-    </>
-  );
+  return <ProductRoadmap />;
 }
 
 export default App;
