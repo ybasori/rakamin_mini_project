@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import TextField from "./components/atoms/TextField/TextField";
+import React from "react";
+import Button from "./components/atoms/Button/Button";
 
 function App() {
-  const [text, setText] = useState("");
   return (
-    <TextField
-      value={text}
-      onChange={(e) => setText(e.currentTarget.value)}
-      placeholder="input"
-    />
+    <Button onClick={() => null} variant="danger">
+      Cancel
+    </Button>
   );
 }
 
