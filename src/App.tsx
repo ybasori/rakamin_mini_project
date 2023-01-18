@@ -1,12 +1,8 @@
 import React from "react";
-import Button from "./components/atoms/Button/Button";
+import Progress from "./components/atoms/Progress/Progress";
 
 function App() {
-  return (
-    <Button onClick={() => null} variant="danger">
-      Cancel
-    </Button>
-  );
+  return <Progress number={90} />;
 }
 
 export default App;

@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+.bg-progress {
+  background: #ededed;
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+.progress {
+  background: #01959f;
+  height: 100%;
+  &.complete {
+    background: #43936c;
+  }
+}
+.number {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  /* Neutral/70 */
+
+  color: #757575;
+}
+
+.checklist {
+  width: 16px;
+  height: 16px;
+}
