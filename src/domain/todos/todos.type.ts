@@ -29,4 +29,7 @@ export interface ITODOS {
   isLoadingCreateItem: boolean;
   createItem: unknown;
   errorCreateItem: unknown;
+  isLoadingDeleteItem: boolean;
+  deleteItem: unknown;
+  errorDeleteItem: unknown;
 }

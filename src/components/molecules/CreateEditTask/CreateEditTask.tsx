@@ -5,8 +5,8 @@ import InputField from "../../atoms/InputField/InputField";
 import Button from "../../atoms/Button/Button";
 import { AppDispatch, RootState } from "../../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { getItems, postItem } from "../../../domain/todos/todos.thunk";
-import { resetCreateItem } from "../../../domain/todos/todos.reducer";
+import { postItem } from "../../../domain/todos/todos.thunk";
+import { resetCreateItem, addItem } from "../../../domain/todos/todos.reducer";
 
 const CreateEditTask: React.FC<{
   todoId?: number;
@@ -32,14 +32,14 @@ const CreateEditTask: React.FC<{
       alert("fail");
     }
     if (todosStore.createItem) {
-      dispatch(resetCreateItem());
       dispatch(
-        getItems({
+        addItem({
           indexTodos:
             todosStore.todos?.findIndex((item) => item.id === todoId) ?? 0,
-          ai: false,
+          item: todosStore.createItem,
         })
       );
+      dispatch(resetCreateItem());
       onClose();
     }
   }, [

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTodos, getItems, postItem } from "./todos.thunk";
+import { getTodos, getItems, postItem, deleteItem } from "./todos.thunk";
 import { ITODOS } from "./todos.type";
 
 const initialState: ITODOS = {
@@ -13,6 +13,9 @@ const initialState: ITODOS = {
   isLoadingCreateItem: false,
   createItem: null,
   errorCreateItem: null,
+  isLoadingDeleteItem: false,
+  deleteItem: null,
+  errorDeleteItem: null,
 };
 
 export const todosSlice = createSlice({
@@ -28,6 +31,28 @@ export const todosSlice = createSlice({
       state.isLoadingCreateItem = false;
       state.createItem = null;
       state.errorCreateItem = null;
+    },
+    resetDeleteItem: (state) => {
+      state.isLoadingDeleteItem = false;
+      state.deleteItem = null;
+      state.errorDeleteItem = null;
+    },
+    addItem: (state, { payload }) => {
+      state.items = state.items.map((item, index) =>
+        payload.indexTodos === index
+          ? { ...item, data: [...item.data, payload.item] }
+          : item
+      );
+    },
+    removeItem: (state, { payload }) => {
+      state.items = state.items.map((item, index) =>
+        index === payload.todoIndex
+          ? {
+              ...item,
+              data: item.data.filter((dt) => dt.id !== payload.itemId),
+            }
+          : item
+      );
     },
   },
   extraReducers: (builder) => {
@@ -51,41 +76,29 @@ export const todosSlice = createSlice({
     });
     builder.addCase(getItems.fulfilled, (state, { payload }) => {
       state.isLoadingItems = false;
-      if (payload.ai) {
-        state.items = [
-          ...state.items,
-          {
-            id: state.todos?.[payload.indexTodos].id ?? 0,
-            data: payload.result.data,
-          },
-        ];
-        const newIndex = payload.indexTodos + 1;
-        if (state.todos?.length ?? 0 > newIndex) {
-          state.gettingIndexItem = newIndex;
-        } else {
-          state.gettingIndexItem = null;
-        }
+      state.items = [
+        ...state.items,
+        {
+          id: state.todos?.[payload.indexTodos].id ?? 0,
+          data: payload.result.data,
+        },
+      ].filter(
+        (item, i, self) =>
+          self.findIndex((subitem) => subitem.id === item.id) === i
+      );
+      const newIndex = payload.indexTodos + 1;
+      if (state.todos?.length ?? 0 > newIndex) {
+        state.gettingIndexItem = newIndex;
       } else {
-        state.items = state.items.map((item, index) =>
-          index === payload.indexTodos ? payload.result.data : item
-        );
         state.gettingIndexItem = null;
       }
     });
     builder.addCase(getItems.rejected, (state, { payload }) => {
       state.isLoadingItems = false;
-      if ((payload as { ai: boolean }).ai) {
-        state.errorItems = [
-          ...state.errorItems,
-          (payload as { error: unknown }).error,
-        ];
-      } else {
-        state.errorItems = state.errorItems.map((item, index) =>
-          index === (state.gettingIndexItem ?? 0)
-            ? (payload as { error: unknown }).error
-            : item
-        );
-      }
+      state.errorItems = [
+        ...state.errorItems,
+        (payload as { error: unknown }).error,
+      ];
     });
     builder.addCase(postItem.pending, (state) => {
       state.isLoadingCreateItem = true;
@@ -100,9 +113,28 @@ export const todosSlice = createSlice({
       state.isLoadingCreateItem = false;
       state.errorCreateItem = payload;
     });
+    builder.addCase(deleteItem.pending, (state) => {
+      state.isLoadingDeleteItem = true;
+      state.deleteItem = null;
+      state.errorDeleteItem = null;
+    });
+    builder.addCase(deleteItem.fulfilled, (state, { payload }) => {
+      state.isLoadingDeleteItem = false;
+      state.deleteItem = payload.data || payload;
+    });
+    builder.addCase(deleteItem.rejected, (state, { payload }) => {
+      state.isLoadingDeleteItem = false;
+      state.errorDeleteItem = payload;
+    });
   },
 });
 
-export const { resetGetTodos, resetCreateItem } = todosSlice.actions;
+export const {
+  resetGetTodos,
+  resetCreateItem,
+  resetDeleteItem,
+  addItem,
+  removeItem,
+} = todosSlice.actions;
 
 export default todosSlice.reducer;

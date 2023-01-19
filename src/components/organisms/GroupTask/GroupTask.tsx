@@ -33,9 +33,7 @@ const GroupTask: React.FC<{
     ) {
       if (oneTime) {
         setOneTime(false);
-        dispatch(
-          getItems({ indexTodos: todosStore.gettingIndexItem, ai: true })
-        );
+        dispatch(getItems(todosStore.gettingIndexItem));
       }
     }
   }, [
@@ -55,8 +53,8 @@ const GroupTask: React.FC<{
         <div className={styles["tasks-list"]}>
           {todosStore.items
             .filter((item) => item.id === data.id)[0]
-            ?.data?.map((item) => (
-              <Task data={item} />
+            ?.data?.map((item, index) => (
+              <Task key={`task-${index}`} todoIndex={data.index} data={item} />
             ))}
         </div>
         <div className={styles["add-new"]} onClick={() => setOpenModal(true)}>

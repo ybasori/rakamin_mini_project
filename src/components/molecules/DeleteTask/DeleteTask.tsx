@@ -1,10 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./DeleteTask.module.scss";
 import close from "../../../assets/images/close.png";
 import Button from "../../atoms/Button/Button";
 import exclamation from "../../../assets/images/exclamation.png";
+import { AppDispatch, RootState } from "../../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteItem } from "../../../domain/todos/todos.thunk";
+import {
+  removeItem,
+  resetDeleteItem,
+} from "../../../domain/todos/todos.reducer";
 
-const DeleteTask: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const DeleteTask: React.FC<{
+  onClose: () => void;
+  todoIndex: number;
+  itemId: number;
+}> = ({ onClose, todoIndex, itemId }) => {
+  const dispatch: AppDispatch = useDispatch();
+  const todosStore = useSelector((state: RootState) => state.todos);
+  const onSubmit = () => {
+    dispatch(deleteItem({ todoIndex, itemId }));
+  };
+
+  useEffect(() => {
+    if (todosStore.deleteItem || todosStore.errorDeleteItem) {
+      dispatch(resetDeleteItem());
+      dispatch(removeItem({ todoIndex, itemId }));
+      onClose();
+    }
+  }, [
+    dispatch,
+    itemId,
+    onClose,
+    todoIndex,
+    todosStore.deleteItem,
+    todosStore.errorDeleteItem,
+  ]);
+
   return (
     <div className={styles["container"]}>
       <div className={styles["header"]}>
@@ -27,7 +59,11 @@ const DeleteTask: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       <div className={styles["footer"]}>
         <div className={styles["action-button"]}>
           <Button onClick={onClose}>Cancel</Button>
-          <Button variant="danger" onClick={() => null}>
+          <Button
+            variant="danger"
+            disable={todosStore.isLoadingDeleteItem}
+            onClick={onSubmit}
+          >
             Delete
           </Button>
         </div>

@@ -6,7 +6,18 @@ import Modal from "../../atoms/Modal/Modal";
 import CreateEditTask from "../CreateEditTask/CreateEditTask";
 import DeleteTask from "../DeleteTask/DeleteTask";
 
-const SettingButton: React.FC = () => {
+const SettingButton: React.FC<{
+  todoIndex: number;
+  data: {
+    created_at: string;
+    done: unknown;
+    id: number;
+    name: string;
+    progress_percentage: number;
+    todo_id: number;
+    updated_at: string;
+  };
+}> = ({ todoIndex, data }) => {
   const [active, setActive] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("");
   return (
@@ -38,7 +49,11 @@ const SettingButton: React.FC = () => {
             <CreateEditTask edit onClose={() => setSelectedMenu("")} />
           )}
           {selectedMenu === "delete" && (
-            <DeleteTask onClose={() => setSelectedMenu("")} />
+            <DeleteTask
+              todoIndex={todoIndex}
+              itemId={data.id}
+              onClose={() => setSelectedMenu("")}
+            />
           )}
         </Modal>
       )}

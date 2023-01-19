@@ -23,6 +23,7 @@ const GroupList: React.FC = () => {
     <div className={styles["container"]}>
       {todosStore.todos?.map((item, index) => (
         <GroupTask
+          key={`grouptask-${index}`}
           data={{ ...item, index }}
           variant={
             variants[Math.floor(Math.random() * variants.length)] as
