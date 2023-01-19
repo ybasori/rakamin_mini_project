@@ -38,4 +38,7 @@ export interface ITODOS {
   isLoadingMoveItem: boolean;
   moveItem: unknown;
   errorMoveItem: unknown;
+  isLoadingCreateTodo: boolean;
+  createTodo: unknown;
+  errorCreateTodo: unknown;
 }

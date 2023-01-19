@@ -1,15 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CreateGroup.module.scss";
 import close from "../../../assets/images/close.png";
 import InputField from "../../atoms/InputField/InputField";
 import Button from "../../atoms/Button/Button";
 import TextField from "../../atoms/TextField/TextField";
+import { AppDispatch, RootState } from "../../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { postTodo } from "../../../domain/todos/todos.thunk";
+import { resetPostTodo } from "../../../domain/todos/todos.reducer";
 
 const CreateGroup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const dispatch: AppDispatch = useDispatch();
+  const todosStore = useSelector((state: RootState) => state.todos);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
   });
+
+  const onSubmit = () => {
+    dispatch(postTodo(form));
+  };
+
+  useEffect(() => {
+    if (todosStore.errorCreateTodo) {
+      dispatch(resetPostTodo());
+      alert("fail");
+    }
+    if (todosStore.createTodo) {
+      dispatch(resetPostTodo());
+      onClose();
+    }
+  }, [dispatch, onClose, todosStore.createTodo, todosStore.errorCreateTodo]);
+
   return (
     <div className={styles["container"]}>
       <div className={styles["header"]}>
@@ -49,7 +72,11 @@ const CreateGroup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       <div className={styles["footer"]}>
         <div className={styles["action-button"]}>
           <Button onClick={onClose}>Cancel</Button>
-          <Button variant="primary" onClick={() => null}>
+          <Button
+            variant="primary"
+            disable={todosStore.isLoadingCreateTodo}
+            onClick={onSubmit}
+          >
             Submit
           </Button>
         </div>
