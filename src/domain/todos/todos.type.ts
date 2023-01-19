@@ -32,4 +32,7 @@ export interface ITODOS {
   isLoadingDeleteItem: boolean;
   deleteItem: unknown;
   errorDeleteItem: unknown;
+  isLoadingEditItem: boolean;
+  editItem: unknown;
+  errorEditItem: unknown;
 }

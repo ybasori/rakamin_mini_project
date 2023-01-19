@@ -31,18 +31,19 @@ const GroupTask: React.FC<{
       !todosStore.isLoadingItems &&
       todosStore.gettingIndexItem === data.index
     ) {
-      if (oneTime) {
+      if (oneTime && todosStore.todos) {
+        console.log(todosStore.todos[todosStore.gettingIndexItem].id);
         setOneTime(false);
-        dispatch(getItems(todosStore.gettingIndexItem));
+        dispatch(getItems(todosStore.todos[todosStore.gettingIndexItem].id));
       }
     }
   }, [
     data.index,
     dispatch,
     oneTime,
-    todosStore.errorItems,
     todosStore.gettingIndexItem,
     todosStore.isLoadingItems,
+    todosStore.todos,
   ]);
 
   return (
@@ -54,7 +55,7 @@ const GroupTask: React.FC<{
           {todosStore.items
             .filter((item) => item.id === data.id)[0]
             ?.data?.map((item, index) => (
-              <Task key={`task-${index}`} todoIndex={data.index} data={item} />
+              <Task key={`task-${index}`} todoId={data.id} data={item} />
             ))}
         </div>
         <div className={styles["add-new"]} onClick={() => setOpenModal(true)}>

@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
+import logger from "redux-logger";
 import storage from "redux-persist/lib/storage";
 import authReducer from "./domain/auth/auth.reducer";
 import todosReducer from "./domain/todos/todos.reducer";
@@ -20,7 +21,7 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+    getDefaultMiddleware({ serializableCheck: false }).concat(logger),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

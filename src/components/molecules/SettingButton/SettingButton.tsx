@@ -7,7 +7,7 @@ import CreateEditTask from "../CreateEditTask/CreateEditTask";
 import DeleteTask from "../DeleteTask/DeleteTask";
 
 const SettingButton: React.FC<{
-  todoIndex: number;
+  todoId: number;
   data: {
     created_at: string;
     done: unknown;
@@ -17,7 +17,7 @@ const SettingButton: React.FC<{
     todo_id: number;
     updated_at: string;
   };
-}> = ({ todoIndex, data }) => {
+}> = ({ todoId, data }) => {
   const [active, setActive] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("");
   return (
@@ -46,11 +46,15 @@ const SettingButton: React.FC<{
       {(selectedMenu === "delete" || selectedMenu === "edit") && (
         <Modal onClose={() => setSelectedMenu("")}>
           {selectedMenu === "edit" && (
-            <CreateEditTask edit onClose={() => setSelectedMenu("")} />
+            <CreateEditTask
+              todoId={todoId}
+              edit={data}
+              onClose={() => setSelectedMenu("")}
+            />
           )}
           {selectedMenu === "delete" && (
             <DeleteTask
-              todoIndex={todoIndex}
+              todoId={todoId}
               itemId={data.id}
               onClose={() => setSelectedMenu("")}
             />

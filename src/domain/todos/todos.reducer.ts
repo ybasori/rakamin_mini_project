@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getTodos, getItems, postItem, deleteItem } from "./todos.thunk";
+import {
+  getTodos,
+  getItems,
+  postItem,
+  deleteItem,
+  editItem,
+} from "./todos.thunk";
 import { ITODOS } from "./todos.type";
 
 const initialState: ITODOS = {
@@ -16,17 +22,15 @@ const initialState: ITODOS = {
   isLoadingDeleteItem: false,
   deleteItem: null,
   errorDeleteItem: null,
+  isLoadingEditItem: false,
+  editItem: null,
+  errorEditItem: null,
 };
 
 export const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    resetGetTodos: (state) => {
-      state.isLoadingTodos = false;
-      state.todos = null;
-      state.errorTodos = null;
-    },
     resetCreateItem: (state) => {
       state.isLoadingCreateItem = false;
       state.createItem = null;
@@ -38,21 +42,40 @@ export const todosSlice = createSlice({
       state.errorDeleteItem = null;
     },
     addItem: (state, { payload }) => {
-      state.items = state.items.map((item, index) =>
-        payload.indexTodos === index
+      state.items = state.items.map((item) =>
+        payload.todoId === item.id
           ? { ...item, data: [...item.data, payload.item] }
           : item
       );
     },
     removeItem: (state, { payload }) => {
-      state.items = state.items.map((item, index) =>
-        index === payload.todoIndex
+      state.items = state.items.map((item) =>
+        item.id === payload.todoId
           ? {
               ...item,
               data: item.data.filter((dt) => dt.id !== payload.itemId),
             }
           : item
       );
+    },
+    updateItem: (state, { payload }) => {
+      state.items = state.items.map((item) =>
+        payload.todoId === item.id
+          ? {
+              ...item,
+              data: [
+                ...item.data.map((subItem) =>
+                  subItem.id === payload.itemId ? payload.item : subItem
+                ),
+              ],
+            }
+          : item
+      );
+    },
+    resetEditItem: (state) => {
+      state.isLoadingEditItem = false;
+      state.editItem = null;
+      state.errorEditItem = null;
     },
   },
   extraReducers: (builder) => {
@@ -79,14 +102,16 @@ export const todosSlice = createSlice({
       state.items = [
         ...state.items,
         {
-          id: state.todos?.[payload.indexTodos].id ?? 0,
+          id: payload.todoId,
           data: payload.result.data,
         },
       ].filter(
         (item, i, self) =>
           self.findIndex((subitem) => subitem.id === item.id) === i
       );
-      const newIndex = payload.indexTodos + 1;
+
+      const newIndex =
+        (state.todos?.findIndex((item) => item.id === payload.todoId) ?? 0) + 1;
       if (state.todos?.length ?? 0 > newIndex) {
         state.gettingIndexItem = newIndex;
       } else {
@@ -126,15 +151,29 @@ export const todosSlice = createSlice({
       state.isLoadingDeleteItem = false;
       state.errorDeleteItem = payload;
     });
+    builder.addCase(editItem.pending, (state) => {
+      state.isLoadingEditItem = true;
+      state.editItem = null;
+      state.errorEditItem = null;
+    });
+    builder.addCase(editItem.fulfilled, (state, { payload }) => {
+      state.isLoadingEditItem = false;
+      state.editItem = payload.data;
+    });
+    builder.addCase(editItem.rejected, (state, { payload }) => {
+      state.isLoadingEditItem = false;
+      state.errorEditItem = payload;
+    });
   },
 });
 
 export const {
-  resetGetTodos,
   resetCreateItem,
   resetDeleteItem,
   addItem,
   removeItem,
+  resetEditItem,
+  updateItem,
 } = todosSlice.actions;
 
 export default todosSlice.reducer;

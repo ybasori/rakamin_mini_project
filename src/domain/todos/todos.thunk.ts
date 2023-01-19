@@ -28,13 +28,11 @@ export const getTodos = createAsyncThunk(
 
 export const getItems = createAsyncThunk(
   "todos/getItems",
-  async (indexTodos: number, { getState, rejectWithValue }) => {
+  async (todoId: number, { getState, rejectWithValue }) => {
     try {
       const state = getState() as unknown as RootState;
       const result = await axios.get(
-        `${process.env.REACT_APP_API ?? ""}/todos/${
-          state.todos.todos?.[indexTodos].id
-        }/items`,
+        `${process.env.REACT_APP_API ?? ""}/todos/${todoId}/items`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -42,12 +40,16 @@ export const getItems = createAsyncThunk(
           },
         }
       );
-      return { result, indexTodos };
+
+      return {
+        result,
+        todoId,
+      };
     } catch (err) {
       if (err instanceof AxiosError) {
-        return rejectWithValue({ error: err.response, indexTodos });
+        return rejectWithValue({ error: err.response, todoId });
       }
-      return rejectWithValue({ error: err, indexTodos });
+      return rejectWithValue({ error: err, todoId });
     }
   }
 );
@@ -82,18 +84,51 @@ export const postItem = createAsyncThunk(
     }
   }
 );
+export const editItem = createAsyncThunk(
+  "todos/editItem",
+  async (
+    {
+      todoId,
+      itemId,
+      body,
+    }: {
+      todoId: number;
+      itemId: number;
+      body: { name: string; progress_percentage: string };
+    },
+    { getState, rejectWithValue }
+  ) => {
+    try {
+      const state = getState() as unknown as RootState;
+      const result = await axios.patch(
+        `${process.env.REACT_APP_API ?? ""}/todos/${todoId}/items/${itemId}`,
+        { ...body, target_todo_id: todoId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${state.auth.data?.auth_token}`,
+          },
+        }
+      );
+      return result;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        return rejectWithValue(err.response);
+      }
+      return rejectWithValue(err);
+    }
+  }
+);
 export const deleteItem = createAsyncThunk(
   "todos/deleteItem",
   async (
-    { todoIndex, itemId }: { todoIndex: number; itemId: number },
+    { todoId, itemId }: { todoId: number; itemId: number },
     { getState, rejectWithValue }
   ) => {
     try {
       const state = getState() as unknown as RootState;
       const result = await axios.delete(
-        `${process.env.REACT_APP_API ?? ""}/todos/${
-          state.todos.todos?.[todoIndex].id
-        }/items/${itemId}`,
+        `${process.env.REACT_APP_API ?? ""}/todos/${todoId}/items/${itemId}`,
         {
           headers: {
             "Content-Type": "application/json",

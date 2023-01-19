@@ -13,26 +13,26 @@ import {
 
 const DeleteTask: React.FC<{
   onClose: () => void;
-  todoIndex: number;
+  todoId: number;
   itemId: number;
-}> = ({ onClose, todoIndex, itemId }) => {
+}> = ({ onClose, todoId, itemId }) => {
   const dispatch: AppDispatch = useDispatch();
   const todosStore = useSelector((state: RootState) => state.todos);
   const onSubmit = () => {
-    dispatch(deleteItem({ todoIndex, itemId }));
+    dispatch(deleteItem({ todoId, itemId }));
   };
 
   useEffect(() => {
     if (todosStore.deleteItem || todosStore.errorDeleteItem) {
       dispatch(resetDeleteItem());
-      dispatch(removeItem({ todoIndex, itemId }));
+      dispatch(removeItem({ todoId, itemId }));
       onClose();
     }
   }, [
     dispatch,
     itemId,
     onClose,
-    todoIndex,
+    todoId,
     todosStore.deleteItem,
     todosStore.errorDeleteItem,
   ]);
