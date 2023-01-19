@@ -33,7 +33,9 @@ const GroupTask: React.FC<{
     ) {
       if (oneTime) {
         setOneTime(false);
-        dispatch(getItems(todosStore.gettingIndexItem));
+        dispatch(
+          getItems({ indexTodos: todosStore.gettingIndexItem, ai: true })
+        );
       }
     }
   }, [
@@ -51,9 +53,11 @@ const GroupTask: React.FC<{
         <Label variant={variant}>{data.title}</Label>
         <div className={styles["date"]}>{data.description}</div>
         <div className={styles["tasks-list"]}>
-          {todosStore.items?.[data.index]?.map((item) => (
-            <Task data={item} />
-          ))}
+          {todosStore.items
+            .filter((item) => item.id === data.id)[0]
+            ?.data?.map((item) => (
+              <Task data={item} />
+            ))}
         </div>
         <div className={styles["add-new"]} onClick={() => setOpenModal(true)}>
           <img className={styles["plus"]} src={plus} alt="" loading="lazy" />
@@ -63,7 +67,10 @@ const GroupTask: React.FC<{
 
       {openModal && (
         <Modal onClose={() => setOpenModal(false)}>
-          <CreateEditTask onClose={() => setOpenModal(false)} />
+          <CreateEditTask
+            onClose={() => setOpenModal(false)}
+            todoId={data.id}
+          />
         </Modal>
       )}
     </>

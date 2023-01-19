@@ -13,14 +13,20 @@ export interface ITODOS {
   errorTodos: unknown;
   isLoadingItems: boolean;
   items: {
-    created_at: string;
-    done: unknown;
     id: number;
-    name: string;
-    progress_percentage: number;
-    todo_id: number;
-    updated_at: string;
-  }[][];
+    data: {
+      created_at: string;
+      done: unknown;
+      id: number;
+      name: string;
+      progress_percentage: number;
+      todo_id: number;
+      updated_at: string;
+    }[];
+  }[];
   errorItems: unknown[];
   gettingIndexItem: number | null;
+  isLoadingCreateItem: boolean;
+  createItem: unknown;
+  errorCreateItem: unknown;
 }

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./InputField.module.scss";
 
 const InputField: React.FC<{
-  type?: "text" | "password";
+  type?: "text" | "password" | "number";
   value: string;
   placeholder: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
