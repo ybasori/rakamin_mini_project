@@ -5,9 +5,13 @@ const Button: React.FC<{
   children: React.ReactNode;
   onClick: React.MouseEventHandler<HTMLDivElement>;
   variant?: "default" | "primary" | "danger";
-}> = ({ children, onClick, variant = "default" }) => {
+  disable?: boolean;
+}> = ({ children, onClick, variant = "default", disable = false }) => {
   return (
-    <div className={`${styles["button"]} ${styles[variant]}`} onClick={onClick}>
+    <div
+      className={`${styles["button"]} ${styles[variant]}`}
+      onClick={disable ? () => null : onClick}
+    >
       {children}
     </div>
   );
