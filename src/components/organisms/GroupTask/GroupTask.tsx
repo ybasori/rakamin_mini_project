@@ -8,13 +8,21 @@ import CreateEditTask from "../../molecules/CreateEditTask/CreateEditTask";
 
 const GroupTask: React.FC<{
   variant: "primary" | "warning" | "danger" | "success";
-}> = ({ variant }) => {
+  data: {
+    id: number;
+    title: string;
+    description: string;
+    created_by: string;
+    created_at: string;
+    updated_at: string;
+  };
+}> = ({ data, variant }) => {
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
       <div className={`${styles["container"]} ${styles[variant]}`}>
-        <Label variant={variant}>Group Task 1</Label>
-        <div className={styles["date"]}>January - March</div>
+        <Label variant={variant}>{data.title}</Label>
+        <div className={styles["date"]}>{data.description}</div>
         <div className={styles["tasks-list"]}>
           <Task />
           <Task />
