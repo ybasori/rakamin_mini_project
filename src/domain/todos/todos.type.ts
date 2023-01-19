@@ -11,4 +11,16 @@ export interface ITODOS {
       }[]
     | null;
   errorTodos: unknown;
+  isLoadingItems: boolean;
+  items: {
+    created_at: string;
+    done: unknown;
+    id: number;
+    name: string;
+    progress_percentage: number;
+    todo_id: number;
+    updated_at: string;
+  }[][];
+  errorItems: unknown[];
+  gettingIndexItem: number | null;
 }

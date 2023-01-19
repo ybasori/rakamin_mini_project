@@ -2,15 +2,9 @@
   position: relative;
   width: 24px;
   height: 24px;
-  background: transparent;
-  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:hover {
-    background: #ededed;
-  }
-  z-index: 1;
 }
 
 .bg {
@@ -25,10 +19,16 @@
   position: absolute;
   left: 0;
   top: 32px;
+  z-index: 1;
 }
 .button {
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  background: transparent;
+  border-radius: 4px;
+  &:hover {
+    background: #ededed;
+  }
 }

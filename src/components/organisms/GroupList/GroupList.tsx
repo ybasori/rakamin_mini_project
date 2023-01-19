@@ -21,9 +21,9 @@ const GroupList: React.FC = () => {
   }, [dispatch, oneTime, todosStore.errorTodos, todosStore.isLoadingTodos]);
   return (
     <div className={styles["container"]}>
-      {todosStore.todos?.map((item) => (
+      {todosStore.todos?.map((item, index) => (
         <GroupTask
-          data={item}
+          data={{ ...item, index }}
           variant={
             variants[Math.floor(Math.random() * variants.length)] as
               | "primary"

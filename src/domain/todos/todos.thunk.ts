@@ -25,3 +25,29 @@ export const getTodos = createAsyncThunk(
     }
   }
 );
+
+export const getItems = createAsyncThunk(
+  "todos/getItems",
+  async (indexTodos: number, { getState, rejectWithValue }) => {
+    try {
+      const state = getState() as unknown as RootState;
+      const result = await axios.get(
+        `${process.env.REACT_APP_API ?? ""}/todos/${
+          state.todos.todos?.[indexTodos].id
+        }/items`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${state.auth.data?.auth_token}`,
+          },
+        }
+      );
+      return result;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        return rejectWithValue(err.response);
+      }
+      return rejectWithValue(err);
+    }
+  }
+);

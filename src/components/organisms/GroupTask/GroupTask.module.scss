@@ -10,11 +10,13 @@
 
   border-radius: 4px;
   gap: 8px;
+  height: fit-content;
 }
 .tasks-list {
   display: flex;
   gap: 12px;
   flex-direction: column;
+  width: 100%;
 }
 .date {
   font-family: "Nunito Sans";
