@@ -5,6 +5,7 @@ import {
   postItem,
   deleteItem,
   editItem,
+  moveItem,
 } from "./todos.thunk";
 import { ITODOS } from "./todos.type";
 
@@ -25,6 +26,9 @@ const initialState: ITODOS = {
   isLoadingEditItem: false,
   editItem: null,
   errorEditItem: null,
+  isLoadingMoveItem: false,
+  moveItem: null,
+  errorMoveItem: null,
 };
 
 export const todosSlice = createSlice({
@@ -76,6 +80,11 @@ export const todosSlice = createSlice({
       state.isLoadingEditItem = false;
       state.editItem = null;
       state.errorEditItem = null;
+    },
+    resetMoveItem: (state) => {
+      state.isLoadingMoveItem = false;
+      state.moveItem = null;
+      state.errorMoveItem = null;
     },
   },
   extraReducers: (builder) => {
@@ -164,6 +173,34 @@ export const todosSlice = createSlice({
       state.isLoadingEditItem = false;
       state.errorEditItem = payload;
     });
+    builder.addCase(moveItem.pending, (state) => {
+      state.isLoadingMoveItem = true;
+      state.moveItem = null;
+      state.errorMoveItem = null;
+    });
+    builder.addCase(moveItem.fulfilled, (state, { payload }) => {
+      state.isLoadingMoveItem = false;
+      state.moveItem = payload.result.data;
+      const newTodoId = payload.result.data.todo_id;
+      state.items = state.items.map((todo) =>
+        todo.id === payload.todoId
+          ? {
+              ...todo,
+              data: [
+                ...todo.data.filter(
+                  (item) => item.id !== payload.result.data.id
+                ),
+              ],
+            }
+          : todo.id === newTodoId
+          ? { ...todo, data: [...todo.data, payload.result.data] }
+          : todo
+      );
+    });
+    builder.addCase(moveItem.rejected, (state, { payload }) => {
+      state.isLoadingMoveItem = false;
+      state.errorMoveItem = payload;
+    });
   },
 });
 
@@ -174,6 +211,7 @@ export const {
   removeItem,
   resetEditItem,
   updateItem,
+  resetMoveItem,
 } = todosSlice.actions;
 
 export default todosSlice.reducer;

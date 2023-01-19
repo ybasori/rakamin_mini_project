@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./SettingButton.module.scss";
 import tripplDots from "../../../assets/images/tripple-dots.png";
 import MenuDialog from "../../atoms/MenuDialog/MenuDialog";
 import Modal from "../../atoms/Modal/Modal";
 import CreateEditTask from "../CreateEditTask/CreateEditTask";
 import DeleteTask from "../DeleteTask/DeleteTask";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store";
+import { moveItem } from "../../../domain/todos/todos.thunk";
+import { resetMoveItem } from "../../../domain/todos/todos.reducer";
 
 const SettingButton: React.FC<{
   todoId: number;
@@ -18,8 +22,26 @@ const SettingButton: React.FC<{
     updated_at: string;
   };
 }> = ({ todoId, data }) => {
+  const dispatch: AppDispatch = useDispatch();
+  const todosStore = useSelector((state: RootState) => state.todos);
   const [active, setActive] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("");
+
+  useEffect(() => {
+    if (!todosStore.isLoadingMoveItem) {
+      if (selectedMenu === "move-right") {
+        dispatch(moveItem({ todoId, itemId: data.id, move: 1 }));
+        setSelectedMenu("");
+        dispatch(resetMoveItem());
+      }
+      if (selectedMenu === "move-left") {
+        dispatch(moveItem({ todoId, itemId: data.id, move: -1 }));
+        setSelectedMenu("");
+        dispatch(resetMoveItem());
+      }
+    }
+  }, [data.id, dispatch, selectedMenu, todoId, todosStore.isLoadingMoveItem]);
+
   return (
     <>
       {active && (
@@ -35,6 +57,7 @@ const SettingButton: React.FC<{
         {active && (
           <div className={styles["dropdown"]}>
             <MenuDialog
+              todoId={todoId}
               onClick={(slug) => {
                 setSelectedMenu(slug);
                 return setActive(false);
