@@ -21,7 +21,8 @@ const SettingButton: React.FC<{
     todo_id: number;
     updated_at: string;
   };
-}> = ({ todoId, data }) => {
+  onSelectedMenu: (slug: string) => void;
+}> = ({ todoId, data, onSelectedMenu }) => {
   const dispatch: AppDispatch = useDispatch();
   const todosStore = useSelector((state: RootState) => state.todos);
   const [active, setActive] = useState(false);
@@ -29,6 +30,7 @@ const SettingButton: React.FC<{
 
   useEffect(() => {
     if (!todosStore.isLoadingMoveItem) {
+      onSelectedMenu(selectedMenu);
       if (selectedMenu === "move-right") {
         dispatch(moveItem({ todoId, itemId: data.id, move: 1 }));
         setSelectedMenu("");
@@ -40,7 +42,14 @@ const SettingButton: React.FC<{
         dispatch(resetMoveItem());
       }
     }
-  }, [data.id, dispatch, selectedMenu, todoId, todosStore.isLoadingMoveItem]);
+  }, [
+    data.id,
+    dispatch,
+    onSelectedMenu,
+    selectedMenu,
+    todoId,
+    todosStore.isLoadingMoveItem,
+  ]);
 
   return (
     <>

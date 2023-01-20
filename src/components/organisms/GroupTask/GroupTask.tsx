@@ -32,11 +32,11 @@ interface IItem {
 const GroupTask: React.FC<{
   variant: "primary" | "warning" | "danger" | "success";
   data: ITodo;
-  onDrag: (data: { todo: ITodo; item: IItem }) => void;
-  dragData: { item: IItem; todo: ITodo } | null;
-  onDragOver: () => void;
+  onDrag: (data: { todoId: number; item: IItem }) => void;
+  dragData: { todoId: number; item: IItem } | null;
+  onDragEnd: () => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>, todo: ITodo) => void;
-}> = ({ data, variant, onDrag, dragData, onDragOver, onDrop }) => {
+}> = ({ data, variant, onDrag, dragData, onDragEnd, onDrop }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const dispatch: AppDispatch = useDispatch();
@@ -75,17 +75,15 @@ const GroupTask: React.FC<{
             .filter((item) => item.id === data.id)[0]
             ?.data?.map((item, index, self) => (
               <React.Fragment key={`task-${index}`}>
-                <div
-                  draggable
-                  className={styles["draggable"]}
-                  onDrag={() => onDrag({ todo: data, item })}
-                  onDragEnd={onDragOver}
-                >
-                  <Task todoId={data.id} data={item} />
-                </div>
+                <Task
+                  todoId={data.id}
+                  data={item}
+                  onDrag={onDrag}
+                  onDragEnd={onDragEnd}
+                />
               </React.Fragment>
             ))}
-          {dragData && dragData.todo.id !== data.id && (
+          {dragData && dragData.todoId !== data.id && (
             <div className={styles["empty-task"]}></div>
           )}
         </div>

@@ -32,17 +32,18 @@ const GroupList: React.FC = () => {
   const todosStore = useSelector((state: RootState) => state.todos);
   const [oneTime, setOneTime] = useState(true);
 
-  const [dragData, setDragData] = useState<{ item: IItem; todo: ITodo } | null>(
-    null
-  );
+  const [dragData, setDragData] = useState<{
+    todoId: number;
+    item: IItem;
+  } | null>(null);
 
-  const onDrag = (data: { todo: ITodo; item: IItem }) => {
+  const onDrag = (data: { todoId: number; item: IItem }) => {
     setDragData(data);
   };
   const onDrop = (todo: ITodo) => {
     if (dragData !== null) {
       const dragTodoIndex = todosStore.todos?.findIndex(
-        (item) => item.id === dragData.todo.id
+        (item) => item.id === dragData.todoId
       );
       const targetIndex = todosStore.todos?.findIndex(
         (item) => item.id === todo.id
@@ -51,7 +52,7 @@ const GroupList: React.FC = () => {
       if (move !== 0) {
         dispatch(
           moveItem({
-            todoId: dragData.todo.id,
+            todoId: dragData.todoId,
             itemId: dragData.item.id,
             move: (targetIndex ?? 0) - (dragTodoIndex ?? 0),
           })
@@ -82,7 +83,7 @@ const GroupList: React.FC = () => {
               | "success"
           }
           onDrag={onDrag}
-          onDragOver={() => setDragData(null)}
+          onDragEnd={() => setDragData(null)}
           dragData={dragData}
           onDrop={() => onDrop(todo)}
         />
