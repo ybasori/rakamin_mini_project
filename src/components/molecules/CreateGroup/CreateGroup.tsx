@@ -18,7 +18,8 @@ const CreateGroup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     description: "",
   });
 
-  const onSubmit = () => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
     dispatch(postTodo(form));
   };
 
@@ -34,7 +35,7 @@ const CreateGroup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   }, [dispatch, onClose, todosStore.createTodo, todosStore.errorCreateTodo]);
 
   return (
-    <div className={styles["container"]}>
+    <form className={styles["container"]} onSubmit={onSubmit}>
       <div className={styles["header"]}>
         <div className={styles["title"]}>Add New Group</div>
         <div className={styles["close"]} onClick={onClose}>
@@ -75,13 +76,13 @@ const CreateGroup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           <Button
             variant="primary"
             disable={todosStore.isLoadingCreateTodo}
-            onClick={onSubmit}
+            type={"submit"}
           >
             Submit
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

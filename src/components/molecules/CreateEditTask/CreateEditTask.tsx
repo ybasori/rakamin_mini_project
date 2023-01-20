@@ -33,7 +33,8 @@ const CreateEditTask: React.FC<{
   const dispatch: AppDispatch = useDispatch();
   const todosStore = useSelector((state: RootState) => state.todos);
 
-  const onSubmit = () => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
     if (todoId && !edit) {
       dispatch(postItem({ body: form, todoId }));
     }
@@ -100,7 +101,7 @@ const CreateEditTask: React.FC<{
     }
   }, [edit]);
   return (
-    <div className={styles["container"]}>
+    <form className={styles["container"]} onSubmit={onSubmit}>
       <div className={styles["header"]}>
         <div className={styles["title"]}>
           {edit ? "Edit Task" : "Create Task"}
@@ -142,13 +143,13 @@ const CreateEditTask: React.FC<{
           <Button
             variant="primary"
             disable={todosStore.isLoadingCreateItem}
-            onClick={onSubmit}
+            type={"submit"}
           >
             Save Task
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

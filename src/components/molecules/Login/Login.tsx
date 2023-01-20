@@ -21,7 +21,8 @@ const Login: React.FC = () => {
     password_confirmation: "",
   });
 
-  const onSubmit = () => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
     if (isRegister) {
       dispatch(postRegister({ ...form, ...registerForm }));
     } else {
@@ -65,7 +66,7 @@ const Login: React.FC = () => {
   }, [authStore.errorRegister, authStore.register, dispatch]);
 
   return (
-    <div className={styles["container"]}>
+    <form className={styles["container"]} onSubmit={onSubmit}>
       <div className={styles["header"]}>
         <div className={styles["title"]}>
           {isRegister ? "Register" : "Login"}
@@ -143,15 +144,15 @@ const Login: React.FC = () => {
             <Button onClick={() => setIsRegister(true)}>Register</Button>
           )}
           <Button
+            type="submit"
             variant="primary"
-            onClick={onSubmit}
             disable={authStore.isLoadingAuth}
           >
             {isRegister ? "Register" : "Login"}
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
