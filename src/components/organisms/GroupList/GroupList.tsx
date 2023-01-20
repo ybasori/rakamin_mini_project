@@ -1,9 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTodos } from "../../../domain/todos/todos.thunk";
+import { getTodos, moveItem } from "../../../domain/todos/todos.thunk";
 import { AppDispatch, RootState } from "../../../store";
 import GroupTask from "../GroupTask/GroupTask";
 import styles from "./GroupList.module.scss";
+
+interface ITodo {
+  index?: number;
+  id: number;
+  title: string;
+  description: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface IItem {
+  created_at: string;
+  done: unknown;
+  id: number;
+  name: string;
+  progress_percentage: number;
+  todo_id: number;
+  updated_at: string;
+}
 
 const variants = ["primary", "warning", "danger", "success"];
 
@@ -11,6 +31,35 @@ const GroupList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const todosStore = useSelector((state: RootState) => state.todos);
   const [oneTime, setOneTime] = useState(true);
+
+  const [dragData, setDragData] = useState<{ item: IItem; todo: ITodo } | null>(
+    null
+  );
+
+  const onDrag = (data: { todo: ITodo; item: IItem }) => {
+    setDragData(data);
+  };
+  const onDrop = (todo: ITodo) => {
+    if (dragData !== null) {
+      const dragTodoIndex = todosStore.todos?.findIndex(
+        (item) => item.id === dragData.todo.id
+      );
+      const targetIndex = todosStore.todos?.findIndex(
+        (item) => item.id === todo.id
+      );
+      const move = (targetIndex ?? 0) - (dragTodoIndex ?? 0);
+      if (move !== 0) {
+        dispatch(
+          moveItem({
+            todoId: dragData.todo.id,
+            itemId: dragData.item.id,
+            move: (targetIndex ?? 0) - (dragTodoIndex ?? 0),
+          })
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     if (!todosStore.isLoadingTodos) {
       if (oneTime && !todosStore.errorTodos) {
@@ -21,10 +70,10 @@ const GroupList: React.FC = () => {
   }, [dispatch, oneTime, todosStore.errorTodos, todosStore.isLoadingTodos]);
   return (
     <div className={styles["container"]}>
-      {todosStore.todos?.map((item, index) => (
+      {todosStore.todos?.map((todo, index) => (
         <GroupTask
           key={`grouptask-${index}`}
-          data={{ ...item, index }}
+          data={{ ...todo, index }}
           variant={
             variants[Math.floor(Math.random() * variants.length)] as
               | "primary"
@@ -32,6 +81,10 @@ const GroupList: React.FC = () => {
               | "danger"
               | "success"
           }
+          onDrag={onDrag}
+          onDragOver={() => setDragData(null)}
+          dragData={dragData}
+          onDrop={() => onDrop(todo)}
         />
       ))}
     </div>
