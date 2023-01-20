@@ -33,10 +33,11 @@ const GroupTask: React.FC<{
   variant: "primary" | "warning" | "danger" | "success";
   data: ITodo;
   onDrag: (data: { todoId: number; item: IItem }) => void;
-  dragData: { todoId: number; item: IItem } | null;
   onDragEnd: () => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>, todo: ITodo) => void;
-}> = ({ data, variant, onDrag, dragData, onDragEnd, onDrop }) => {
+  overId: number | null;
+  setOverId: (overId: number | null) => void;
+}> = ({ data, variant, onDrag, onDragEnd, onDrop, overId, setOverId }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const dispatch: AppDispatch = useDispatch();
@@ -63,17 +64,20 @@ const GroupTask: React.FC<{
 
   return (
     <>
-      <div className={`${styles["container"]} ${styles[variant]}`}>
+      <div
+        className={`${styles["container"]} ${styles[variant]}`}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setOverId(data.id);
+        }}
+        onDrop={(e) => onDrop(e, data)}
+      >
         <Label variant={variant}>{data.title}</Label>
         <div className={styles["date"]}>{data.description}</div>
-        <div
-          className={styles["tasks-list"]}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => onDrop(e, data)}
-        >
+        <div className={styles["tasks-list"]}>
           {todosStore.items
             .filter((item) => item.id === data.id)[0]
-            ?.data?.map((item, index, self) => (
+            ?.data?.map((item, index) => (
               <React.Fragment key={`task-${index}`}>
                 <Task
                   todoId={data.id}
@@ -83,7 +87,7 @@ const GroupTask: React.FC<{
                 />
               </React.Fragment>
             ))}
-          {dragData && dragData.todoId !== data.id && (
+          {overId && overId === data.id && (
             <div className={styles["empty-task"]}></div>
           )}
         </div>

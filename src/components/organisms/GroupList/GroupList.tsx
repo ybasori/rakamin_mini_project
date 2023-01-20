@@ -25,8 +25,6 @@ interface IItem {
   updated_at: string;
 }
 
-const variants = ["primary", "warning", "danger", "success"];
-
 const GroupList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const todosStore = useSelector((state: RootState) => state.todos);
@@ -36,6 +34,8 @@ const GroupList: React.FC = () => {
     todoId: number;
     item: IItem;
   } | null>(null);
+
+  const [overId, setOverId] = useState<number | null>(null);
 
   const onDrag = (data: { todoId: number; item: IItem }) => {
     setDragData(data);
@@ -76,16 +76,22 @@ const GroupList: React.FC = () => {
           key={`grouptask-${index}`}
           data={{ ...todo, index }}
           variant={
-            variants[Math.floor(Math.random() * variants.length)] as
-              | "primary"
-              | "warning"
-              | "danger"
-              | "success"
+            (index + 2) % 5 === 1
+              ? "danger"
+              : (index + 2) % 3 === 1
+              ? "success"
+              : (index + 2) % 3 === 0
+              ? "warning"
+              : "primary"
           }
           onDrag={onDrag}
-          onDragEnd={() => setDragData(null)}
-          dragData={dragData}
+          onDragEnd={() => {
+            setDragData(null);
+            setOverId(null);
+          }}
           onDrop={() => onDrop(todo)}
+          setOverId={setOverId}
+          overId={overId}
         />
       ))}
     </div>
