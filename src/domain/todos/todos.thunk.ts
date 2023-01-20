@@ -196,7 +196,7 @@ export const moveItem = createAsyncThunk(
 
       const targetTodoId =
         state.todos.todos?.[
-          state.todos.items.findIndex((todo) => todo.id === todoId) + move
+          state.todos.todos.findIndex((todo) => todo.id === todoId) + move
         ]?.id ?? 0;
 
       const result = await axios.patch(
