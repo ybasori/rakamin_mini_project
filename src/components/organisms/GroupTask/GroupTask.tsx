@@ -32,7 +32,6 @@ const GroupTask: React.FC<{
       todosStore.gettingIndexItem === data.index
     ) {
       if (oneTime && todosStore.todos) {
-        console.log(todosStore.todos[todosStore.gettingIndexItem].id);
         setOneTime(false);
         dispatch(getItems(todosStore.todos[todosStore.gettingIndexItem].id));
       }
