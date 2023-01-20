@@ -63,14 +63,14 @@ const GroupTask: React.FC<{
 
   return (
     <>
-      <div className={`${styles["container"]} ${styles[variant]}`}>
+      <div
+        className={`${styles["container"]} ${styles[variant]}`}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => onDrop(e, data)}
+      >
         <Label variant={variant}>{data.title}</Label>
         <div className={styles["date"]}>{data.description}</div>
-        <div
-          className={styles["tasks-list"]}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => onDrop(e, data)}
-        >
+        <div className={styles["tasks-list"]}>
           {todosStore.items
             .filter((item) => item.id === data.id)[0]
             ?.data?.map((item, index, self) => (
