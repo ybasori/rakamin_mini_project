@@ -192,7 +192,7 @@ export const moveItem = createAsyncThunk(
 
       const body = state.todos.items
         .filter((todo) => todo.id === todoId)[0]
-        .data.filter((item) => item.id === itemId);
+        .data.filter((item) => item.id === itemId)[0];
 
       const targetTodoId =
         state.todos.todos?.[
